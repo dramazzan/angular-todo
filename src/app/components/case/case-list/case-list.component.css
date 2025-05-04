@@ -12,7 +12,6 @@
   font-size: 28px;
   margin-bottom: 24px;
   color: #2c3e50;
-  border-bottom: 2px solid #eaeaea;
   padding-bottom: 10px;
 }
 
@@ -460,4 +459,184 @@ ng-template p {
   .sort-button {
     margin-bottom: 8px;
   }
+}
+
+/* Добавьте эти стили в ваш case-list.component.css */
+
+/* Основные стили для контейнера */
+.case-list-container {
+  position: relative;
+}
+
+/* Стили для шапки с заголовком и переключателем */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.toggle-view-button {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.toggle-view-button:hover {
+  background-color: #e0e0e0;
+}
+
+.trash-count {
+  background-color: #f44336;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+/* Стили для корзины */
+.trash-bin-container {
+  margin-top: 20px;
+}
+
+.trash-actions-panel {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+.trash-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.empty-trash-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.empty-trash-button:hover {
+  background-color: #d32f2f;
+}
+
+.trash-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trash-item {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.trash-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.trash-item:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background-color: #f44336;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.delete-info {
+  font-size: 13px;
+  color: #757575;
+  font-style: italic;
+}
+
+.trash-item-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.restore-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.restore-button:hover {
+  background-color: #388e3c;
+}
+
+.permanent-delete-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.permanent-delete-button:hover {
+  background-color: #d32f2f;
+}
+
+.empty-trash-message {
+  text-align: center;
+  padding: 30px;
+  color: #757575;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  border: 1px dashed #ddd;
+}
+
+
+.header-buttons{
+  display: flex;
+  gap:10px;
+  align-items: center;
+}
+
+.header-buttons a{
+  padding: 8px 16px;
+  background: #f0f0f0;
+  border:1px solid #ddd;
+  border-radius: 4px;
+  color:#333;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.header-buttons a:hover{
+  background: #e0e0e0;
 }

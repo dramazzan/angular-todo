@@ -1,0 +1,227 @@
+/* Dashboard Container */
+.dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .dashboard-container h2 {
+    grid-column: 1 / -1;
+    margin-bottom: 1rem;
+    color: #333;
+    font-weight: 500;
+    border-bottom: 2px solid #eaeaea;
+    padding-bottom: 0.5rem;
+  }
+  
+  /* User Profile Card */
+  .user-profile-card {
+    background: linear-gradient(145deg, #ffffff, #f9f9f9);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .user-profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #5e72e4, #825ee4);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .user-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+  }
+  
+  .user-role {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .action-card {
+    display: flex;
+    align-items: center;
+    background-color: #f8f9fa;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #495057;
+    font-weight: 500;
+    width: 100%;
+    margin-top: 1rem;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    
+  }
+
+  button.action-card{
+    border:none;
+    width: 100%;
+  }
+
+  
+  .action-card:hover {
+    background-color: #e9ecef;
+    transform: scale(1.03);
+  }
+  
+  .action-icon {
+    margin-right: 0.75rem;
+    font-size: 1.25rem;
+  }
+  
+  /* User Info Card */
+  .user-info-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem;
+  }
+  
+  .info-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #eaeaea;
+  }
+  
+  .info-item {
+    display: flex;
+    margin-bottom: 1rem;
+  }
+  
+  .info-label {
+    width: 80px;
+    color: #6c757d;
+    font-weight: 500;
+  }
+  
+  .info-value {
+    color: #333;
+    font-weight: 400;
+  }
+  
+  /* Error and Loading States */
+  .error-container, 
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    width: 100%;
+  }
+  
+  .error {
+    color: #dc3545;
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #5e72e4;
+    animation: spin 1s ease-in-out infinite;
+    margin-bottom: 1rem;
+  }
+  
+  .loading-text {
+    color: #6c757d;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .dashboard-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .user-profile-card,
+    .user-info-card {
+      margin-bottom: 1rem;
+    }
+  }
+
+
+  /* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(3px);
+  }
+  
+  .modal-content {
+    background-color: white;
+    border-radius: 8px;
+    padding: 24px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #777;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  
+  .close-button:hover {
+    background-color: #f5f5f5;
+    color: #333;
+  }

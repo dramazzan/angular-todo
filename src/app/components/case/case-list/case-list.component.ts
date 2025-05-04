@@ -5,17 +5,21 @@ import { CommonModule } from '@angular/common';
 import { CreateCaseComponent } from "../create-case/create-case.component";
 import { UpdateCaseComponent } from '../update-case/update-case.component';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+import { DashboardComponent } from '../../dashboard/dashboard.component';
 
 @Component({
   selector: 'app-case-list',
   standalone: true, 
-  imports: [CommonModule, CreateCaseComponent, UpdateCaseComponent, FormsModule],
+  imports: [CommonModule, CreateCaseComponent, UpdateCaseComponent, FormsModule , RouterLink , DashboardComponent],
   templateUrl: './case-list.component.html',
   styleUrl: './case-list.component.css'
 })
 export class CaseListComponent implements OnInit {
   caseList: Case[] = [];
   filteredCaseList: Case[] = [];
+  trashBin: Case[] = []; // Корзина для удаленных кейсов
+  showTrashBin: boolean = false; // Флаг для отображения корзины
   errorMessage: string = "";
 
   isModalOpen: boolean = false;
@@ -38,9 +42,18 @@ export class CaseListComponent implements OnInit {
   // Доступные опции для фильтров
   availableTags: string[] = [];
 
-  isFavorite: boolean = false
-
-  constructor(private caseService: CaseService) {}
+  constructor(private caseService: CaseService) {
+    // При инициализации пытаемся загрузить корзину из localStorage
+    const savedTrash = localStorage.getItem('casesTrashBin');
+    if (savedTrash) {
+      try {
+        this.trashBin = JSON.parse(savedTrash);
+      } catch (e) {
+        console.error('Ошибка при загрузке корзины из localStorage:', e);
+        this.trashBin = [];
+      }
+    }
+  }
 
   openModal(modalType: string, ...props: any) {
     this.modalProps = props;
@@ -63,7 +76,7 @@ export class CaseListComponent implements OnInit {
     }
   }
 
-  toggleFavorite(caseID: string ){
+  toggleFavorite(caseID: string) {
     this.caseService.toggleFavorite(caseID).subscribe({
       next: (res) => {
         const updated = this.caseList.find(c => c._id === caseID);
@@ -79,17 +92,95 @@ export class CaseListComponent implements OnInit {
     });
   }
   
-
-  handleDelete(caseID: string) {
-    console.log(caseID);
+  // Новый метод для перемещения в корзину
+  moveToTrash(caseItem: Case) {
+    if (!caseItem._id) return;
+    
+    // Добавляем кейс в корзину
+    this.trashBin.push({...caseItem, deletedAt: new Date()});
+    
+    // Сохраняем корзину в localStorage
+    localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
+    
+    // Удаляем кейс из основного списка
+    this.caseList = this.caseList.filter(c => c._id !== caseItem._id);
+    this.applyFiltersAndSort();
+  }
+  
+  // Метод для восстановления из корзины
+  restoreFromTrash(caseID: string) {
+    const caseIndex = this.trashBin.findIndex(c => c._id === caseID);
+    if (caseIndex === -1) return;
+    
+    // Получаем кейс из корзины
+    const caseToRestore = this.trashBin[caseIndex];
+    
+    // Удаляем поле deletedAt если оно было
+    delete caseToRestore.deletedAt;
+    
+    // Добавляем обратно в основной список
+    this.caseList.push(caseToRestore);
+    
+    // Удаляем из корзины
+    this.trashBin.splice(caseIndex, 1);
+    
+    // Обновляем localStorage
+    localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
+    
+    // Обновляем отображение
+    this.applyFiltersAndSort();
+  }
+  
+  // Метод для окончательного удаления из корзины
+  deleteFromTrash(caseID: string) {
+    const caseToDelete = this.trashBin.find(c => c._id === caseID);
+    if (!caseToDelete) return;
+    
+    // Вызываем сервис для удаления с сервера
     this.caseService.deleteCase(caseID).subscribe({
       next: () => {
-        this.ngOnInit();
+        // После успешного удаления с сервера, удаляем из нашей корзины
+        this.trashBin = this.trashBin.filter(c => c._id !== caseID);
+        localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
       },
       error: (err) => {
         this.errorMessage = err.error.message || "Error Deleting Case";
       }
     });
+  }
+  
+  // Очистить всю корзину
+  emptyTrash() {
+    if (confirm('Вы уверены, что хотите удалить все кейсы из корзины? Это действие нельзя отменить.')) {
+      // Итерируемся по всем кейсам в корзине и удаляем каждый с сервера
+      const deletePromises = this.trashBin.map(c => {
+        if (c._id) {
+          return new Promise((resolve, reject) => {
+            this.caseService.deleteCase(c._id!).subscribe({
+              next: () => resolve(true),
+              error: (err) => reject(err)
+            });
+          });
+        }
+        return Promise.resolve(true);
+      });
+      
+      // После всех удалений очищаем корзину
+      Promise.all(deletePromises)
+        .then(() => {
+          this.trashBin = [];
+          localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
+        })
+        .catch(err => {
+          this.errorMessage = "Error while emptying trash";
+          console.error(err);
+        });
+    }
+  }
+  
+  // Переключение отображения основного списка и корзины
+  toggleTrashBinView() {
+    this.showTrashBin = !this.showTrashBin;
   }
 
   ngOnInit(): void {
@@ -207,7 +298,7 @@ export class CaseListComponent implements OnInit {
   }
 
   // Форматирование даты для отображения
-  formatDate(date: Date | undefined): string {
+  formatDate(date: Date | string | undefined): string {
     if (!date) return '';
     const d = new Date(date);
     return d.toLocaleDateString();

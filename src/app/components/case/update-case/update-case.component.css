@@ -1,0 +1,279 @@
+/* Update Case Container */
+.case-container {
+    font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  /* Form Title */
+  .case-container h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 12px;
+  }
+  
+  .case-container h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: #3498db;
+    border-radius: 3px;
+  }
+  
+  /* Form Layout */
+  .case-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  /* Form Groups */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  /* Labels */
+  .form-group label {
+    font-size: 16px;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 4px;
+  }
+  
+  /* Input Fields */
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 14px 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    background-color: #f9fafc;
+    color: #333;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    background-color: white;
+  }
+  
+  .form-group input:hover,
+  .form-group textarea:hover,
+  .form-group select:hover {
+    border-color: #bbb;
+  }
+  
+  /* Textarea specific */
+  .form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  /* Select specific styling */
+  .form-group select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232c3e50' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    cursor: pointer;
+  }
+  
+  .form-group select option {
+    padding: 10px;
+  }
+  
+  /* Status-specific select styling */
+  #status option[value="pending"] {
+    background-color: #fff3e0;
+    color: #e65100;
+  }
+  
+  #status option[value="in-progress"] {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+  }
+  
+  #status option[value="completed"] {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+  }
+  
+  /* Priority-specific select styling */
+  #priority option[value="low"] {
+    background-color: #f1f8e9;
+    color: #558b2f;
+  }
+  
+  #priority option[value="medium"] {
+    background-color: #fff8e1;
+    color: #ff8f00;
+  }
+  
+  #priority option[value="high"] {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+  
+  /* Error Messages */
+  .error {
+    color: #e74c3c;
+    font-size: 14px;
+    margin-top: 6px;
+    display: flex;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+  }
+  
+  .error::before {
+    content: '⚠️';
+    margin-right: 6px;
+    font-size: 14px;
+  }
+  
+  /* Form-level error message */
+  .case-form > .error {
+    background-color: #fdeaea;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border-left: 4px solid #e74c3c;
+    margin: 10px 0;
+  }
+  
+  /* Invalid input styling */
+  .form-group input.ng-invalid.ng-touched,
+  .form-group textarea.ng-invalid.ng-touched,
+  .form-group select.ng-invalid.ng-touched {
+    border-color: #e74c3c;
+    background-color: #fff8f8;
+  }
+  
+  /* Submit Button */
+  .case-form button[type="submit"] {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 10px;
+    align-self: flex-start;
+    box-shadow: 0 2px 5px rgba(52, 152, 219, 0.2);
+  }
+  
+  .case-form button[type="submit"]:hover:not(:disabled) {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
+  }
+  
+  .case-form button[type="submit"]:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: 0 2px 3px rgba(52, 152, 219, 0.2);
+  }
+  
+  .case-form button[type="submit"]:disabled {
+    background-color: #b3d7f0;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  /* Loading State */
+  div[loading] {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    background-color: #f9fafc;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    position: relative;
+  }
+  
+  div[loading]::after {
+    content: '';
+    width: 30px;
+    height: 30px;
+    border: 3px solid #3498db;
+    border-top-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 12px;
+    animation: spin 1s linear infinite;
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .case-container {
+      padding: 20px;
+      border-radius: 8px;
+    }
+    
+    .case-container h2 {
+      font-size: 24px;
+    }
+    
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 12px 14px;
+    }
+    
+    .case-form button[type="submit"] {
+      width: 100%;
+      padding: 12px;
+    }
+  }
+  
+  /* Focus visible for accessibility */
+  .form-group input:focus-visible,
+  .form-group textarea:focus-visible,
+  .form-group select:focus-visible,
+  .case-form button:focus-visible {
+    outline: 2px solid #3498db;
+    outline-offset: 2px;
+  }

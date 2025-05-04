@@ -1,21 +1,40 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { User } from '../../models/model.user';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { EditProfileComponent } from '../edit-profile/edit-profile.component';
 
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule , RouterLink , EditProfileComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   user: User | null = null;
   errorMessage: string = '';
+  isModalOpen: boolean = false
 
   constructor(private userService: UserService) {}
+
+  openModal(){
+    this.isModalOpen = true;
+  }
+
+  closeModal(){
+    this.isModalOpen = false
+  }
+
+
+  closeModalWhenSuccess(status: boolean){
+    if(status){
+      this.isModalOpen = false
+      this.ngOnInit()
+    }
+  }
 
   ngOnInit(): void {
     this.userService.dashboard().subscribe({
@@ -27,4 +46,7 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+  
+
 }

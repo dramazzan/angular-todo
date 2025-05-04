@@ -11,5 +11,6 @@ export interface Case {
     userId?: string;
     createdAt?: Date;
     updatedAt?: Date;
+    deletedAt?:Date;
   }
   

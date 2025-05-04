@@ -1,0 +1,36 @@
+<div class="case-container">
+    <h2>Edit Profile</h2>
+  
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="case-form">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input id="name" type="text" formControlName="name" placeholder="Enter name" />
+        <div *ngIf="editForm.get('name')?.touched && editForm.get('name')?.invalid" class="error">
+          Name is required
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="Enter email" />
+        <div *ngIf="editForm.get('email')?.touched && editForm.get('email')?.invalid" class="error">
+          Email is required
+        </div>
+      </div>
+  
+      <div class="form-group">
+        <label for="login">Login</label>
+        <input id="login" type="text" formControlName="login" placeholder="Enter login" />
+        <div *ngIf="editForm.get('login')?.touched && editForm.get('login')?.invalid" class="error">
+          Login is required
+        </div>
+      </div>
+  
+      <div *ngIf="errorMessage" class="error">
+        {{ errorMessage }}
+      </div>
+  
+      <button type="submit" [disabled]="editForm.invalid">Save</button>
+    </form>
+  </div>
+  
