@@ -1,0 +1,14 @@
+<h2>Регистрация</h2>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div>
+    <input type="text" formControlName="name" placeholder="Имя пользователя">
+  </div>
+  <div>
+    <input type="email" formControlName="email" placeholder="Email">
+  </div>
+  <div>
+    <input type="password" formControlName="password" placeholder="Пароль">
+  </div>
+  <button type="submit">Зарегистрироваться</button>
+</form>
+<div *ngIf="errorMessage">{{ errorMessage }}</div>

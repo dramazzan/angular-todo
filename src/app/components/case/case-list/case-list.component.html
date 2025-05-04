@@ -1,0 +1,49 @@
+<div class="case-list-container">
+
+    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+      
+          <app-create-case
+            *ngIf="modalType === 'create'"
+            (caseCreated)="closeModalWhenSuccess($event)"
+          ></app-create-case>
+      
+          <app-update-case
+          *ngIf="modalType === 'update'"
+          [caseData]="modalProps[0]"
+          [caseId]="modalProps[1]"
+          (caseUpdated)="closeModalWhenSuccess($event)"
+        ></app-update-case>
+        
+      
+          <button class="close-button" (click)="closeModal()">X</button>
+        </div>
+      </div>
+      
+
+    <h2>Case List</h2>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    <div *ngIf="caseList?.length && caseList.length > 0; else noCases">
+      <ul class="case-list">
+        <li *ngFor="let c of caseList" class="case-item">
+          <h3>{{ c.title }}</h3>
+          <p>{{ c.description }}</p>
+          <button *ngIf="c._id" (click)="handleDelete(c._id)">Delete</button>
+          <button *ngIf="c._id" (click)="openModal('update', c, c._id)">Update</button>
+        </li>
+      </ul>
+    </div>
+
+    <button (click)="openModal('create')" class="create-button">
+        Create Case
+    </button>
+  
+    <ng-template #noCases>
+      <p>No cases available.</p>
+    </ng-template>
+  </div>
+  

@@ -1,0 +1,17 @@
+<div class="dashboard-container" *ngIf="user; else loadingOrError">
+    <h2>Панель пользователя</h2>
+    <p><strong>Имя:</strong> {{ user.name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Логин:</strong> {{ user.login }}</p>
+    <p><strong>Роль:</strong> {{ user.role }}</p>
+  </div>
+  
+  <ng-template #loadingOrError>
+    <div *ngIf="errorMessage; else loading">
+      <p class="error">{{ errorMessage }}</p>
+    </div>
+    <ng-template #loading>
+      <p>Загрузка...</p>
+    </ng-template>
+  </ng-template>
+  
