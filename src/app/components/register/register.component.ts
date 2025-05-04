@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports:[CommonModule , ReactiveFormsModule , FormsModule],
+  imports:[CommonModule, ReactiveFormsModule, FormsModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -17,7 +17,6 @@ export class RegisterComponent {
 
   constructor(
     private fb: FormBuilder,
-
     private authService: AuthService,
     private router: Router
   ) {
@@ -30,7 +29,14 @@ export class RegisterComponent {
   }
 
   onSubmit(): void {
-    if (this.registerForm.invalid) return;
+    if (this.registerForm.invalid) {
+      // Помечаем все поля как touched для отображения ошибок
+      Object.keys(this.registerForm.controls).forEach(key => {
+        const control = this.registerForm.get(key);
+        control?.markAsTouched();
+      });
+      return;
+    }
 
     this.authService.register(this.registerForm.value).subscribe({
       next: () => {

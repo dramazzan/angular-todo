@@ -1,25 +1,37 @@
 <div class="auth-container">
-  <h2>Вход</h2>
+  <h2>Login</h2>
   <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
-      <label for="login">Логин</label>
+      <label for="login">Username</label>
       <input
         type="text"
         id="login"
         name="login"
         formControlName="login"
       />
+      <div *ngIf="loginForm.get('login')?.invalid && (loginForm.get('login')?.dirty || loginForm.get('login')?.touched)" class="error-text">
+        <span *ngIf="loginForm.get('login')?.errors?.['required']">Username is required</span>
+      </div>
     </div>
     <div class="form-group">
-      <label for="password">Пароль</label>
+      <label for="password">Password</label>
       <input
         type="password"
         id="password"
         name="password"
         formControlName="password"
       />
+      <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="error-text">
+        <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+      </div>
     </div>
-    <button type="submit" [disabled]="!loginForm.valid">Войти</button>
+    
+    <!-- Block for displaying authentication error -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+    
+    <button type="submit" [disabled]="!loginForm.valid">Log In</button>
   </form>
   <a [routerLink]="['/register']">Register</a>
 </div>

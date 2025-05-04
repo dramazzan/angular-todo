@@ -37,7 +37,7 @@ export class LoginComponent {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Ошибка входа';
+        this.errorMessage = err.error?.message || 'Error login, wrong password or login';
       },
     });
   }

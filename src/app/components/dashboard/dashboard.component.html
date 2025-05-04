@@ -1,3 +1,4 @@
+// dashboard.component.html
 <div class="dashboard-container" *ngIf="user; else loadingOrError">
 
   <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
@@ -24,6 +25,11 @@
       <div class="action-icon">📁</div>
       <div>My Cases</div>
     </a>
+    
+    <!-- Logout Button -->
+    <!-- <button class="logout-button" (click)="logout()">
+      <div>Выйти</div>
+    </button> -->
   </div>
   
   <!-- User Info Card -->
@@ -66,6 +72,10 @@
       <button (click)="openModal()" class="action-card">
         <div class="action-icon">✏️</div>
         <div>Edit Profile</div>
+      </button>
+      <button (click)="logout()" class="action-card">
+        <div class="action-icon">🚪</div>
+        <div>Logout</div>
       </button>
     </div>
   </div>

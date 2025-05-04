@@ -31,7 +31,7 @@ export class UpdateCaseComponent implements OnInit {
     });
 
     this.caseService.getCaseById(this.caseId).subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.updateForm.patchValue({
           title: data.case.title,
           description: data.case.description,

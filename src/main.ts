@@ -28,6 +28,7 @@ const routes = [
       import('./app/components/dashboard/dashboard.component').then(
         (m) => DashboardComponent
       ),
+      canActivate:[AuthGuard]
   },
   {
     path: 'cases',

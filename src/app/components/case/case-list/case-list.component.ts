@@ -43,16 +43,7 @@ export class CaseListComponent implements OnInit {
   availableTags: string[] = [];
 
   constructor(private caseService: CaseService) {
-    // При инициализации пытаемся загрузить корзину из localStorage
-    const savedTrash = localStorage.getItem('casesTrashBin');
-    if (savedTrash) {
-      try {
-        this.trashBin = JSON.parse(savedTrash);
-      } catch (e) {
-        console.error('Ошибка при загрузке корзины из localStorage:', e);
-        this.trashBin = [];
-      }
-    }
+    this.loadTrashFromLocalStorage();
   }
 
   openModal(modalType: string, ...props: any) {
@@ -92,15 +83,39 @@ export class CaseListComponent implements OnInit {
     });
   }
   
-  // Новый метод для перемещения в корзину
+  // Загрузка данных корзины из localStorage
+  loadTrashFromLocalStorage() {
+    const savedTrash = localStorage.getItem('casesTrashBin');
+    if (savedTrash) {
+      try {
+        this.trashBin = JSON.parse(savedTrash);
+      } catch (e) {
+        console.error('Ошибка при загрузке корзины из localStorage:', e);
+        this.trashBin = [];
+      }
+    }
+  }
+  
+  // Сохранение данных корзины в localStorage
+  saveTrashToLocalStorage() {
+    localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
+  }
+  
+  // Получение списка ID кейсов, находящихся в корзине
+  getTrashIDs(): string[] {
+    return this.trashBin.map(c => c._id!).filter(id => id);
+  }
+  
+  // Метод для перемещения в корзину
   moveToTrash(caseItem: Case) {
     if (!caseItem._id) return;
     
-    // Добавляем кейс в корзину
-    this.trashBin.push({...caseItem, deletedAt: new Date()});
+    // Добавляем кейс в корзину с датой удаления
+    const caseWithDelete = { ...caseItem, deletedAt: new Date() };
+    this.trashBin.push(caseWithDelete);
     
     // Сохраняем корзину в localStorage
-    localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
+    this.saveTrashToLocalStorage();
     
     // Удаляем кейс из основного списка
     this.caseList = this.caseList.filter(c => c._id !== caseItem._id);
@@ -113,7 +128,7 @@ export class CaseListComponent implements OnInit {
     if (caseIndex === -1) return;
     
     // Получаем кейс из корзины
-    const caseToRestore = this.trashBin[caseIndex];
+    const caseToRestore = { ...this.trashBin[caseIndex] };
     
     // Удаляем поле deletedAt если оно было
     delete caseToRestore.deletedAt;
@@ -125,7 +140,7 @@ export class CaseListComponent implements OnInit {
     this.trashBin.splice(caseIndex, 1);
     
     // Обновляем localStorage
-    localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
+    this.saveTrashToLocalStorage();
     
     // Обновляем отображение
     this.applyFiltersAndSort();
@@ -141,7 +156,7 @@ export class CaseListComponent implements OnInit {
       next: () => {
         // После успешного удаления с сервера, удаляем из нашей корзины
         this.trashBin = this.trashBin.filter(c => c._id !== caseID);
-        localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
+        this.saveTrashToLocalStorage();
       },
       error: (err) => {
         this.errorMessage = err.error.message || "Error Deleting Case";
@@ -169,7 +184,7 @@ export class CaseListComponent implements OnInit {
       Promise.all(deletePromises)
         .then(() => {
           this.trashBin = [];
-          localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
+          this.saveTrashToLocalStorage();
         })
         .catch(err => {
           this.errorMessage = "Error while emptying trash";
@@ -188,9 +203,14 @@ export class CaseListComponent implements OnInit {
   }
 
   loadCases(): void {
+    // Получаем ID всех кейсов, которые находятся в корзине
+    const trashIDs = this.getTrashIDs();
+    
     this.caseService.getAllCases().subscribe({
       next: (data: any) => {
-        this.caseList = data.cases;
+        // Фильтруем кейсы, исключая те, что в корзине
+        this.caseList = data.cases.filter((c: Case) => c._id && !trashIDs.includes(c._id));
+        
         this.extractAvailableTags();
         this.applyFiltersAndSort();
       },

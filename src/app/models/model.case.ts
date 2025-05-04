@@ -1,5 +1,5 @@
 export interface Case {
-    case: any;
+  
     _id?: string;
     title: string;
     description: string;
@@ -11,6 +11,8 @@ export interface Case {
     userId?: string;
     createdAt?: Date;
     updatedAt?: Date;
+
     deletedAt?:Date;
+    isDeleted?: boolean
   }
   

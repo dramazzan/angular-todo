@@ -1,14 +1,62 @@
-<h2>Регистрация</h2>
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <div>
-    <input type="text" formControlName="name" placeholder="Имя пользователя">
-  </div>
-  <div>
-    <input type="email" formControlName="email" placeholder="Email">
-  </div>
-  <div>
-    <input type="password" formControlName="password" placeholder="Пароль">
-  </div>
-  <button type="submit">Зарегистрироваться</button>
-</form>
-<div *ngIf="errorMessage">{{ errorMessage }}</div>
+<div class="auth-container">
+  <h2>Register</h2>
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="name">Username</label>
+      <input 
+        type="text" 
+        id="name" 
+        formControlName="name" 
+        placeholder="Username">
+      <div *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.dirty || registerForm.get('name')?.touched)" class="error-text">
+        <span *ngIf="registerForm.get('name')?.errors?.['required']">Username is required</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input 
+        type="email" 
+        id="email" 
+        formControlName="email" 
+        placeholder="Email">
+      <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)" class="error-text">
+        <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+        <span *ngIf="registerForm.get('email')?.errors?.['email']">Enter a valid email</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="login">Login</label>
+      <input 
+        type="text" 
+        id="login" 
+        formControlName="login" 
+        placeholder="Login">
+      <div *ngIf="registerForm.get('login')?.invalid && (registerForm.get('login')?.dirty || registerForm.get('login')?.touched)" class="error-text">
+        <span *ngIf="registerForm.get('login')?.errors?.['required']">Login is required</span>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input 
+        type="password" 
+        id="password" 
+        formControlName="password" 
+        placeholder="Password">
+      <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)" class="error-text">
+        <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+        <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
+      </div>
+    </div>
+
+    <!-- Block for displaying general registration error -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <button type="submit" [disabled]="!registerForm.valid">Sign Up</button>
+  </form>
+  <a [routerLink]="['/login']">Already have an account? Log In</a>
+</div>
