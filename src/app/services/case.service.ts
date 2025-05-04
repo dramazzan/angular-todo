@@ -47,6 +47,11 @@ export class CaseService {
     return this.http.get<Case>(`${this.apiUrl}/case/${id}`);
   }
 
+  toggleFavorite(id: string): Observable<any>{
+
+    return this.http.post(`${this.apiUrl}/favorite` ,{id} , {headers: this.getAuthHeaders()})
+  }
+
   searchCases(query: string): Observable<Case[]> {
     return this.http.get<Case[]>(`${this.apiUrl}/search?query=${encodeURIComponent(query)}`);
   }

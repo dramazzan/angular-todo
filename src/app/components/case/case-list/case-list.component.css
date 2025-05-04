@@ -1,42 +1,463 @@
+/* Main Container */
+.case-list-container {
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #333;
+}
+
+/* Page Title */
+.case-list-container h2 {
+  font-size: 28px;
+  margin-bottom: 24px;
+  color: #2c3e50;
+  border-bottom: 2px solid #eaeaea;
+  padding-bottom: 10px;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #c62828;
+}
+
+/* Search and Filters Panel */
+.search-filters-panel {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Search Box */
+.search-box {
+  margin-bottom: 16px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-box input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+/* Filters Row */
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.filter-item {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-item label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #555;
+}
+
+.filter-item select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filter-item select:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+/* Favorite Filter Button */
+.favorite-filter-button {
+  padding: 10px 16px;
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  width: 100%;
+  margin-top: 24px;
+}
+
+.favorite-filter-button:hover {
+  background-color: #e9e9e9;
+}
+
+.favorite-filter-button.active {
+  background-color: #e1f5fe;
+  border-color: #81d4fa;
+  color: #0277bd;
+}
+
+/* Sort Options */
+.sort-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.sort-options span {
+  color: #666;
+  font-weight: 500;
+  margin-right: 8px;
+}
+
+.sort-button {
+  background-color: transparent;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.sort-button:hover {
+  background-color: #f5f5f5;
+}
+
+.sort-button.active {
+  background-color: #2c3e50;
+  color: white;
+  border-color: #2c3e50;
+}
+
+/* Case List */
+.case-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.case-item {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid #ddd;
+}
+
+.case-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Case with different status colors */
+.case-item:has(.status-pending) {
+  border-left-color: #ff9800;
+}
+
+.case-item:has(.status-progress) {
+  border-left-color: #2196f3;
+}
+
+.case-item:has(.status-completed) {
+  border-left-color: #4caf50;
+}
+
+/* Case Header */
+.case-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.case-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2c3e50;
+  flex: 1;
+}
+
+.case-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Status Tags */
+.status-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.status-pending {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.status-progress {
+  background-color: #e3f2fd;
+  color: #0d47a1;
+}
+
+.status-completed {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+}
+
+/* Priority Tags */
+.priority-tag {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.priority-low {
+  background-color: #f1f8e9;
+  color: #558b2f;
+}
+
+.priority-medium {
+  background-color: #fff8e1;
+  color: #ff8f00;
+}
+
+.priority-high {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+/* Favorite Tag */
+.favorite-tag {
+  background-color: #fce4ec;
+  color: #c2185b;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* Case Description */
+.case-item p {
+  margin: 0 0 16px 0;
+  color: #555;
+  line-height: 1.5;
+}
+
+/* Case Footer */
+.case-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+  gap: 12px;
+}
+
+/* Case Meta Information */
+.case-meta {
+  display: flex;
+  gap: 16px;
+  color: #777;
+  font-size: 13px;
+}
+
+/* Tags List */
+.case-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  background-color: #eceff1;
+  color: #546e7a;
+  padding: 4px 8px;
+  border-radius: 16px;
+  font-size: 12px;
+}
+
+/* Case Actions */
+.case-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Buttons */
+.case-actions button,
 .create-button {
-    margin-bottom: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  border: none;
+}
+
+.case-actions button:hover,
+.create-button:hover {
+  transform: translateY(-1px);
+}
+
+.favorite-button {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.favorite-button:hover {
+  background-color: #e1bee7;
+}
+
+.delete-button {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.delete-button:hover {
+  background-color: #ffcdd2;
+}
+
+.update-button {
+  background-color: #e3f2fd;
+  color: #1565c0;
+}
+
+.update-button:hover {
+  background-color: #bbdefb;
+}
+
+.create-button {
+  background-color: #2c3e50;
+  color: white;
+  padding: 12px 24px;
+  font-size: 16px;
+  margin-top: 20px;
+  display: block;
+  width: 100%;
+  max-width: 200px;
+}
+
+.create-button:hover {
+  background-color: #1a2530;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  padding: 24px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #777;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.close-button:hover {
+  background-color: #f5f5f5;
+  color: #333;
+}
+
+/* Empty State */
+ng-template p {
+  text-align: center;
+  color: #777;
+  padding: 40px 0;
+  font-style: italic;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .case-header {
+    flex-direction: column;
+    gap: 10px;
   }
   
-  .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
+  .case-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .case-actions {
     width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+    justify-content: space-between;
   }
   
-  .modal-content {
-    position: relative;
-    background: white;
-    padding: 2rem;
-    border-radius: 8px;
-    width: 500px;
-    max-width: 90%;
+  .filters-row {
+    flex-direction: column;
+    gap: 12px;
   }
   
-  .close-button {
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    background: transparent;
-    border: none;
-    font-size: 1.2rem;
-    cursor: pointer;
+  .filter-item {
+    width: 100%;
   }
   
+  .sort-options {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .sort-button {
+    margin-bottom: 8px;
+  }
+}

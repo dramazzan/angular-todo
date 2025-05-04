@@ -26,6 +26,8 @@ export class UpdateCaseComponent implements OnInit {
     this.updateForm = this.fb.group({
       title: ['', Validators.required],
       description: ['', Validators.required],
+      status: ['' , Validators.required],
+      priority: ['', Validators.required]
     });
 
     this.caseService.getCaseById(this.caseId).subscribe({
@@ -33,6 +35,8 @@ export class UpdateCaseComponent implements OnInit {
         this.updateForm.patchValue({
           title: data.case.title,
           description: data.case.description,
+          status: data.case.status,
+          priority: data.case.priority
         });
         this.loading = false;
       },

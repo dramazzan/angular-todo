@@ -1,49 +1,153 @@
 <div class="case-list-container">
+  <!-- Модальное окно -->
+  <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <app-create-case
+        *ngIf="modalType === 'create'"
+        (caseCreated)="closeModalWhenSuccess($event)"
+      ></app-create-case>
+      
+      <app-update-case
+        *ngIf="modalType === 'update'"
+        [caseData]="modalProps[0]"
+        [caseId]="modalProps[1]"
+        (caseUpdated)="closeModalWhenSuccess($event)"
+      ></app-update-case>
+      
+      <button class="close-button" (click)="closeModal()">X</button>
+    </div>
+  </div>
 
-    <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
-        <div class="modal-content" (click)="$event.stopPropagation()">
-      
-          <app-create-case
-            *ngIf="modalType === 'create'"
-            (caseCreated)="closeModalWhenSuccess($event)"
-          ></app-create-case>
-      
-          <app-update-case
-          *ngIf="modalType === 'update'"
-          [caseData]="modalProps[0]"
-          [caseId]="modalProps[1]"
-          (caseUpdated)="closeModalWhenSuccess($event)"
-        ></app-update-case>
-        
-      
-          <button class="close-button" (click)="closeModal()">X</button>
-        </div>
+  <h2>Case List</h2>
+  
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Панель поиска и фильтрации -->
+  <div class="search-filters-panel">
+    <!-- Поисковая строка -->
+    <div class="search-box">
+      <input 
+        type="text" 
+        placeholder="Search by title or description..." 
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchChange()">
+    </div>
+    
+    <!-- Фильтры -->
+    <div class="filters-row">
+      <!-- Фильтр по статусу -->
+      <div class="filter-item">
+        <label for="status-filter">Status:</label>
+        <select id="status-filter" [(ngModel)]="statusFilter" (ngModelChange)="onFilterChange()">
+          <option value="all">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="in-progress">In progress</option>
+          <option value="completed">Completed</option>
+        </select>
       </div>
       
-
-    <h2>Case List</h2>
-  
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
+      <!-- Фильтр по приоритету -->
+      <div class="filter-item">
+        <label for="priority-filter">Priority:</label>
+        <select id="priority-filter" [(ngModel)]="priorityFilter" (ngModelChange)="onFilterChange()">
+          <option value="all">All priorities</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+      
+      <!-- Фильтр по тегам -->
+      <div class="filter-item">
+        <label for="tag-filter">Tag:</label>
+        <select id="tag-filter" [(ngModel)]="tagFilter" (ngModelChange)="onFilterChange()">
+          <option value="">All tags</option>
+          <option *ngFor="let tag of availableTags" [value]="tag">{{ tag }}</option>
+        </select>
+      </div>
+      
+      <!-- Фильтр по избранному -->
+      <div class="filter-item">
+        <button 
+          class="favorite-filter-button" 
+          [class.active]="favoriteFilter !== null"
+          (click)="toggleFavoriteFilter()">
+          {{ favoriteFilter === null ? 'All items' : 
+             (favoriteFilter ? 'Favorites only' : 'Non-favorites only') }}
+        </button>
+      </div>
     </div>
-  
-    <div *ngIf="caseList?.length && caseList.length > 0; else noCases">
-      <ul class="case-list">
-        <li *ngFor="let c of caseList" class="case-item">
-          <h3>{{ c.title }}</h3>
-          <p>{{ c.description }}</p>
-          <button *ngIf="c._id" (click)="handleDelete(c._id)">Delete</button>
-          <button *ngIf="c._id" (click)="openModal('update', c, c._id)">Update</button>
-        </li>
-      </ul>
-    </div>
 
-    <button (click)="openModal('create')" class="create-button">
-        Create Case
-    </button>
-  
-    <ng-template #noCases>
-      <p>No cases available.</p>
-    </ng-template>
+    <!-- Опции сортировки -->
+    <div class="sort-options">
+      <span>Sort by:</span>
+      <button 
+        *ngFor="let option of [
+          {field: 'title', label: 'Title'}, 
+          {field: 'priority', label: 'Priority'}, 
+          {field: 'status', label: 'Status'},
+          {field: 'createdAt', label: 'Date created'},
+          {field: 'dueDate', label: 'Due date'}
+        ]" 
+        class="sort-button" 
+        [class.active]="sortField === option.field"
+        (click)="onSortChange(option.field)">
+        {{ option.label }} 
+        <span *ngIf="sortField === option.field">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </button>
+    </div>
   </div>
-  
+
+  <!-- Список задач -->
+  <div *ngIf="filteredCaseList?.length && filteredCaseList.length > 0; else noCases">
+    <ul class="case-list">
+      <li *ngFor="let c of filteredCaseList" class="case-item">
+        <div class="case-header">
+          <h3>{{ c.title }}</h3>
+          <div class="case-tags">
+            <span *ngIf="c.favorite" class="favorite-tag">★ Favorite</span>
+            <span class="status-tag" [ngClass]="{
+              'status-pending': c.status === 'pending',
+              'status-progress': c.status === 'in-progress',
+              'status-completed': c.status === 'completed'
+            }">{{ c.status }}</span>
+            <span class="priority-tag" [ngClass]="{
+              'priority-low': c.priority === 'low',
+              'priority-medium': c.priority === 'medium',
+              'priority-high': c.priority === 'high'
+            }">{{ c.priority }}</span>
+          </div>
+        </div>
+        <p>{{ c.description }}</p>
+        <div class="case-footer">
+          <div class="case-meta">
+            <span *ngIf="c.dueDate">Due: {{ formatDate(c.dueDate) }}</span>
+            <span *ngIf="c.createdAt">Created: {{ formatDate(c.createdAt) }}</span>
+          </div>
+          <div class="case-tags-list">
+            <span *ngFor="let tag of c.tags" class="tag">{{ tag }}</span>
+          </div>
+          <div class="case-actions">
+            <button *ngIf="c._id" (click)="toggleFavorite(c._id)" class="favorite-button">
+              {{ c.favorite ? 'Удалить из избранного' : 'Добавить в избранное' }}
+            </button>
+            <button *ngIf="c._id" (click)="handleDelete(c._id)" class="delete-button">Delete</button>
+            <button *ngIf="c._id" (click)="openModal('update', c, c._id)" class="update-button">Update</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <button (click)="openModal('create')" class="create-button">
+    Create Case
+  </button>
+
+  <ng-template #noCases>
+    <p>No cases available or no cases match your filters.</p>
+  </ng-template>
+</div>
