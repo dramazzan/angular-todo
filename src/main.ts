@@ -1,12 +1,15 @@
 import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter, CanActivate } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { ErrorHandler } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app/app.component';
 import { AuthInterceptor } from './app/interceptors/auth.interceptors';
+import { ErrorInterceptor } from './app/interceptors/error.interceptor'; // <- добавить
 import { DashboardComponent } from './app/components/profile/dashboard/dashboard.component';
 import { AuthGuard } from './app/guards/auth.guard';
 import { AdminGuard } from './app/guards/admin.guard';
+import { GlobalErrorHandler } from './app/handlers/global-error.handler';
 
 const routes = [
   {
@@ -27,9 +30,9 @@ const routes = [
     path: 'dashboard',
     loadComponent: () =>
       import('./app/components/profile/dashboard/dashboard.component').then(
-        (m) => DashboardComponent
+        () => DashboardComponent
       ),
-      canActivate:[AuthGuard]
+    canActivate: [AuthGuard],
   },
   {
     path: 'cases',
@@ -47,14 +50,16 @@ const routes = [
       ),
     canActivate: [AuthGuard, AdminGuard],
   },
-  { path: '', redirectTo: 'login', pathMatch: 'full' as 'full' },
-  { path: '**', redirectTo: 'login', pathMatch: 'full' as 'full' },
+  { path: '', redirectTo: 'login', pathMatch: 'full' as const },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' as const },
 ];
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routes),
-    provideHttpClient(),
+    provideHttpClient(withInterceptorsFromDi()),
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }, 
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
 }).catch((err) => console.error(err));
