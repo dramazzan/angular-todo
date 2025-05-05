@@ -18,6 +18,8 @@ export class DashboardComponent implements OnInit {
   user: User | null = null;
   errorMessage: string = '';
   isModalOpen: boolean = false;
+  isAdmin: boolean = false
+  
 
   constructor(
     private userService: UserService,
@@ -39,6 +41,8 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  
+
   logout() {
     // Remove token from localStorage
     localStorage.removeItem('token');
@@ -50,6 +54,9 @@ export class DashboardComponent implements OnInit {
     this.userService.dashboard().subscribe({
       next: (data) => {
         this.user = data.user;
+        if(data.user?.role === "admin"){
+          this.isAdmin = true
+        }
       },
       error: (err) => {
         this.errorMessage = err.error?.message || 'Ошибка при загрузке данных пользователя';
