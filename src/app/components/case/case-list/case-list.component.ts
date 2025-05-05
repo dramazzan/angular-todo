@@ -6,12 +6,12 @@ import { CreateCaseComponent } from "../create-case/create-case.component";
 import { UpdateCaseComponent } from '../update-case/update-case.component';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { DashboardComponent } from '../../dashboard/dashboard.component';
+import { DashboardComponent } from '../../profile/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-case-list',
-  standalone: true, 
-  imports: [CommonModule, CreateCaseComponent, UpdateCaseComponent, FormsModule , RouterLink , DashboardComponent],
+  standalone: true,
+  imports: [CommonModule, CreateCaseComponent, UpdateCaseComponent, FormsModule , RouterLink],
   templateUrl: './case-list.component.html',
   styleUrl: './case-list.component.css'
 })
@@ -28,17 +28,17 @@ export class CaseListComponent implements OnInit {
 
   // Поисковый запрос
   searchQuery: string = '';
-  
+
   // Фильтры
   statusFilter: string = 'all';
   priorityFilter: string = 'all';
   tagFilter: string = '';
   favoriteFilter: boolean | null = null;
-  
+
   // Сортировка
   sortField: string = 'createdAt';
   sortDirection: string = 'desc';
-  
+
   // Доступные опции для фильтров
   availableTags: string[] = [];
 
@@ -48,21 +48,21 @@ export class CaseListComponent implements OnInit {
 
   openModal(modalType: string, ...props: any) {
     this.modalProps = props;
-    this.modalType = modalType; 
+    this.modalType = modalType;
     this.isModalOpen = true;
   }
 
   closeModal() {
     this.modalProps = null;
     this.modalType = "";
-    this.isModalOpen = false; 
+    this.isModalOpen = false;
   }
 
   closeModalWhenSuccess(success: boolean) {
     if (success) {
       this.modalProps = null;
       this.modalType = "";
-      this.isModalOpen = false; 
+      this.isModalOpen = false;
       this.ngOnInit();
     }
   }
@@ -82,7 +82,7 @@ export class CaseListComponent implements OnInit {
       }
     });
   }
-  
+
   // Загрузка данных корзины из localStorage
   loadTrashFromLocalStorage() {
     const savedTrash = localStorage.getItem('casesTrashBin');
@@ -95,62 +95,62 @@ export class CaseListComponent implements OnInit {
       }
     }
   }
-  
+
   // Сохранение данных корзины в localStorage
   saveTrashToLocalStorage() {
     localStorage.setItem('casesTrashBin', JSON.stringify(this.trashBin));
   }
-  
+
   // Получение списка ID кейсов, находящихся в корзине
   getTrashIDs(): string[] {
     return this.trashBin.map(c => c._id!).filter(id => id);
   }
-  
+
   // Метод для перемещения в корзину
   moveToTrash(caseItem: Case) {
     if (!caseItem._id) return;
-    
+
     // Добавляем кейс в корзину с датой удаления
     const caseWithDelete = { ...caseItem, deletedAt: new Date() };
     this.trashBin.push(caseWithDelete);
-    
+
     // Сохраняем корзину в localStorage
     this.saveTrashToLocalStorage();
-    
+
     // Удаляем кейс из основного списка
     this.caseList = this.caseList.filter(c => c._id !== caseItem._id);
     this.applyFiltersAndSort();
   }
-  
+
   // Метод для восстановления из корзины
   restoreFromTrash(caseID: string) {
     const caseIndex = this.trashBin.findIndex(c => c._id === caseID);
     if (caseIndex === -1) return;
-    
+
     // Получаем кейс из корзины
     const caseToRestore = { ...this.trashBin[caseIndex] };
-    
+
     // Удаляем поле deletedAt если оно было
     delete caseToRestore.deletedAt;
-    
+
     // Добавляем обратно в основной список
     this.caseList.push(caseToRestore);
-    
+
     // Удаляем из корзины
     this.trashBin.splice(caseIndex, 1);
-    
+
     // Обновляем localStorage
     this.saveTrashToLocalStorage();
-    
+
     // Обновляем отображение
     this.applyFiltersAndSort();
   }
-  
+
   // Метод для окончательного удаления из корзины
   deleteFromTrash(caseID: string) {
     const caseToDelete = this.trashBin.find(c => c._id === caseID);
     if (!caseToDelete) return;
-    
+
     // Вызываем сервис для удаления с сервера
     this.caseService.deleteCase(caseID).subscribe({
       next: () => {
@@ -163,7 +163,7 @@ export class CaseListComponent implements OnInit {
       }
     });
   }
-  
+
   // Очистить всю корзину
   emptyTrash() {
     if (confirm('Вы уверены, что хотите удалить все кейсы из корзины? Это действие нельзя отменить.')) {
@@ -179,7 +179,7 @@ export class CaseListComponent implements OnInit {
         }
         return Promise.resolve(true);
       });
-      
+
       // После всех удалений очищаем корзину
       Promise.all(deletePromises)
         .then(() => {
@@ -192,7 +192,7 @@ export class CaseListComponent implements OnInit {
         });
     }
   }
-  
+
   // Переключение отображения основного списка и корзины
   toggleTrashBinView() {
     this.showTrashBin = !this.showTrashBin;
@@ -205,12 +205,12 @@ export class CaseListComponent implements OnInit {
   loadCases(): void {
     // Получаем ID всех кейсов, которые находятся в корзине
     const trashIDs = this.getTrashIDs();
-    
+
     this.caseService.getAllCases().subscribe({
       next: (data: any) => {
         // Фильтруем кейсы, исключая те, что в корзине
         this.caseList = data.cases.filter((c: Case) => c._id && !trashIDs.includes(c._id));
-        
+
         this.extractAvailableTags();
         this.applyFiltersAndSort();
       },
@@ -271,43 +271,43 @@ export class CaseListComponent implements OnInit {
     // Сначала применяем фильтры
     this.filteredCaseList = this.caseList.filter(caseItem => {
       // Поиск по заголовку или описанию
-      const matchesSearch = !this.searchQuery || 
-        caseItem.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+      const matchesSearch = !this.searchQuery ||
+        caseItem.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         caseItem.description.toLowerCase().includes(this.searchQuery.toLowerCase());
-      
+
       // Фильтр по статусу
       const matchesStatus = this.statusFilter === 'all' || caseItem.status === this.statusFilter;
-      
+
       // Фильтр по приоритету
       const matchesPriority = this.priorityFilter === 'all' || caseItem.priority === this.priorityFilter;
-      
+
       // Фильтр по тегам
-      const matchesTag = !this.tagFilter || 
+      const matchesTag = !this.tagFilter ||
         (caseItem.tags && caseItem.tags.includes(this.tagFilter));
-      
+
       // Фильтр по избранному
-      const matchesFavorite = this.favoriteFilter === null || 
+      const matchesFavorite = this.favoriteFilter === null ||
         caseItem.favorite === this.favoriteFilter;
-      
+
       return matchesSearch && matchesStatus && matchesPriority && matchesTag && matchesFavorite;
     });
-    
+
     // Затем сортируем результаты
     this.filteredCaseList.sort((a, b) => {
       let fieldA: any = a[this.sortField as keyof Case];
       let fieldB: any = b[this.sortField as keyof Case];
-      
+
       // Для дат нужно особое сравнение
       if (fieldA instanceof Date && fieldB instanceof Date) {
         fieldA = fieldA.getTime();
         fieldB = fieldB.getTime();
       } else if (typeof fieldA === 'string' && typeof fieldB === 'string') {
         // Для строк используем локализованное сравнение
-        return this.sortDirection === 'asc' 
-          ? fieldA.localeCompare(fieldB) 
+        return this.sortDirection === 'asc'
+          ? fieldA.localeCompare(fieldB)
           : fieldB.localeCompare(fieldA);
       }
-      
+
       // Для остальных типов простое сравнение
       if (this.sortDirection === 'asc') {
         return fieldA > fieldB ? 1 : (fieldA < fieldB ? -1 : 0);

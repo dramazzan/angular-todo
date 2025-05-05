@@ -1,7 +1,7 @@
 
 import { Component, Input, OnInit, Output } from '@angular/core';
-import { User } from '../../models/model.user';
-import { UserService } from '../../services/user.service';
+import { User } from '../../../models/model.user';
+import { UserService } from '../../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { EditProfileComponent } from '../edit-profile/edit-profile.component';
@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit {
   errorMessage: string = '';
   isModalOpen: boolean = false;
   isAdmin: boolean = false
-  
+
 
   constructor(
     private userService: UserService,
@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  
+
 
   logout() {
     // Remove token from localStorage

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges, OnInit } from '@angular/core';
-import { User } from '../../models/model.user';
+import { User } from '../../../models/model.user';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../../services/user.service';
 import { CommonModule } from '@angular/common';
 
 
