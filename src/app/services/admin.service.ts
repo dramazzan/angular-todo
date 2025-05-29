@@ -8,7 +8,7 @@ import { User } from '../models/model.user';
   providedIn: 'root'
 })
 export class AdminService {
-  private apiUrl = 'http://localhost:3000/admin';
+  private apiUrl = 'https://todo-node-server-6q0k.onrender.com/admin';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

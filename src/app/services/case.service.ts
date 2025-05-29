@@ -8,7 +8,7 @@ import { Case } from "../models/model.case";
   providedIn: 'root'
 })
 export class CaseService {
-  private apiUrl = 'http://localhost:3000/cases';
+  private apiUrl = 'https://todo-node-server-6q0k.onrender.com/cases';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

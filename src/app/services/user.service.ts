@@ -8,7 +8,7 @@ import { UserRegisterDto  , User} from "../models/model.user";
   providedIn: 'root'
 })
 export class UserService {
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = 'https://todo-node-server-6q0k.onrender.com/users';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

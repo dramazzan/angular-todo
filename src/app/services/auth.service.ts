@@ -8,7 +8,7 @@ import { UserService } from "./user.service";
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/users';
+  private apiUrl = 'https://todo-node-server-6q0k.onrender.com/users';
 
   constructor(private http: HttpClient) {}
 
