@@ -1,28 +1,35 @@
 <div class="case-container">
-    <h2>Create New Case</h2>
-  
-    <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="case-form">
-      <div class="form-group">
-        <label for="title">Title</label>
-        <input id="title" formControlName="title" type="text" />
-        <div class="error" *ngIf="createForm.get('title')?.invalid && createForm.get('title')?.touched">
-          Title is required.
-        </div>
-      </div>
-  
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea id="description" formControlName="description" rows="5"></textarea>
-        <div class="error" *ngIf="createForm.get('description')?.invalid && createForm.get('description')?.touched">
-          Description is required.
-        </div>
-      </div>
-  
-      <div class="error" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
-  
-      <button type="submit" [disabled]="createForm.invalid">Create Case</button>
-    </form>
+  <h2>Create New Case</h2>
+
+  <!-- 🔹 Индикатор загрузки -->
+  <div class="loading" *ngIf="isLoading">
+    Creating case, please wait...
   </div>
-  
+
+  <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="case-form">
+    <div class="form-group">
+      <label for="title">Title</label>
+      <input id="title" formControlName="title" type="text" />
+      <div class="error" *ngIf="createForm.get('title')?.invalid && createForm.get('title')?.touched">
+        Title is required.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" formControlName="description" rows="5"></textarea>
+      <div class="error" *ngIf="createForm.get('description')?.invalid && createForm.get('description')?.touched">
+        Description is required.
+      </div>
+    </div>
+
+    <div class="error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- 🔹 Отключить кнопку при загрузке -->
+    <button type="submit" [disabled]="createForm.invalid || isLoading">
+      Create Case
+    </button>
+  </form>
+</div>
