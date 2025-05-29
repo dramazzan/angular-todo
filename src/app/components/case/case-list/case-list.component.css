@@ -46,7 +46,9 @@
   border-radius: 4px;
   font-size: 16px;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
+
 
 .search-box input:focus {
   border-color: #3498db;
@@ -431,31 +433,31 @@ ng-template p {
     flex-direction: column;
     gap: 10px;
   }
-  
+
   .case-footer {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .case-actions {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .filters-row {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .filter-item {
     width: 100%;
   }
-  
+
   .sort-options {
     flex-wrap: wrap;
     justify-content: flex-start;
   }
-  
+
   .sort-button {
     margin-bottom: 8px;
   }
