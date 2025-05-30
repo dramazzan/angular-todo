@@ -1,62 +1,180 @@
 <div class="auth-container">
-  <h2>Register</h2>
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="name">Username</label>
-      <input 
-        type="text" 
-        id="name" 
-        formControlName="name" 
-        placeholder="Username">
-      <div *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.dirty || registerForm.get('name')?.touched)" class="error-text">
-        <span *ngIf="registerForm.get('name')?.errors?.['required']">Username is required</span>
+  <div class="auth-grid">
+    <!-- Welcome Card -->
+    <div class="welcome-card">
+      <div class="welcome-content">
+        <h1>Присоединяйтесь к нам</h1>
+        <p>Создайте аккаунт и получите доступ ко всем возможностям нашей платформы.</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <span>Персонализация</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🌟</div>
+            <span>Премиум функции</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🤝</div>
+            <span>Поддержка 24/7</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input 
-        type="email" 
-        id="email" 
-        formControlName="email" 
-        placeholder="Email">
-      <div *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)" class="error-text">
-        <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
-        <span *ngIf="registerForm.get('email')?.errors?.['email']">Enter a valid email</span>
+    <!-- Register Card -->
+    <div class="register-card">
+      <div class="register-header">
+        <div class="logo">
+          <img src="/logo.png" alt="Logo">
+        </div>
+        <h2>Создать аккаунт</h2>
+        <p>Заполните форму для регистрации</p>
       </div>
-    </div>
 
-    <div class="form-group">
-      <label for="login">Login</label>
-      <input 
-        type="text" 
-        id="login" 
-        formControlName="login" 
-        placeholder="Login">
-      <div *ngIf="registerForm.get('login')?.invalid && (registerForm.get('login')?.dirty || registerForm.get('login')?.touched)" class="error-text">
-        <span *ngIf="registerForm.get('login')?.errors?.['required']">Login is required</span>
-      </div>
-    </div>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Имя пользователя</label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name"
+              formControlName="name"
+              [class.error]="name?.invalid && (name?.dirty || name?.touched)"
+              placeholder="Введите имя пользователя"
+              (input)="onFieldChange()"
+            />
+            <div 
+              *ngIf="name?.invalid && (name?.dirty || name?.touched)"
+              class="error-text"
+            >
+              <span *ngIf="name?.errors?.['required']">
+                Имя пользователя обязательно
+              </span>
+            </div>
+          </div>
 
-    <div class="form-group">
-      <label for="password">Password</label>
-      <input 
-        type="password" 
-        id="password" 
-        formControlName="password" 
-        placeholder="Password">
-      <div *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)" class="error-text">
-        <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
-        <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 6 characters</span>
-      </div>
-    </div>
+          <div class="form-group">
+            <label for="login">Логин</label>
+            <input 
+              type="text" 
+              id="login" 
+              name="login"
+              formControlName="login"
+              [class.error]="login?.invalid && (login?.dirty || login?.touched)"
+              placeholder="Введите логин"
+              (input)="onFieldChange()"
+            />
+            <div 
+              *ngIf="login?.invalid && (login?.dirty || login?.touched)"
+              class="error-text"
+            >
+              <span *ngIf="login?.errors?.['required']">
+                Логин обязателен
+              </span>
+            </div>
+          </div>
+        </div>
 
-    <!-- Block for displaying general registration error -->
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email"
+            formControlName="email"
+            [class.error]="email?.invalid && (email?.dirty || email?.touched)"
+            placeholder="Введите email адрес"
+            (input)="onFieldChange()"
+          />
+          <div 
+            *ngIf="email?.invalid && (email?.dirty || email?.touched)"
+            class="error-text"
+          >
+            <span *ngIf="email?.errors?.['required']">
+              Email обязателен
+            </span>
+            <span *ngIf="email?.errors?.['email']">
+              Введите корректный email
+            </span>
+          </div>
+        </div>
 
-    <button type="submit" [disabled]="!registerForm.valid">Sign Up</button>
-  </form>
-  <a [routerLink]="['/login']">Already have an account? Log In</a>
+        <div class="form-group">
+          <label for="password">Пароль</label>
+          <div class="password-input-container">
+            <input 
+              [type]="showPassword ? 'text' : 'password'"
+              id="password" 
+              name="password"
+              formControlName="password"
+              [class.error]="password?.invalid && (password?.dirty || password?.touched)"
+              placeholder="Введите пароль"
+              (input)="onFieldChange()"
+            />
+            <button 
+              type="button" 
+              class="password-toggle"
+              (click)="togglePasswordVisibility()"
+            >
+              <span class="password-icon">{{ showPassword ? '👁️' : '👁️‍🗨️' }}</span>
+            </button>
+          </div>
+          <div 
+            *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+            class="error-text"
+          >
+            <span *ngIf="password?.errors?.['required']">
+              Пароль обязателен
+            </span>
+            <span *ngIf="password?.errors?.['minlength']">
+              Пароль должен содержать минимум 6 символов
+            </span>
+          </div>
+          <div class="password-strength" *ngIf="password?.value">
+            <div class="strength-bar">
+              <div class="strength-fill" [ngClass]="getPasswordStrength()"></div>
+            </div>
+            <span class="strength-text">{{ getPasswordStrengthText() }}</span>
+          </div>
+        </div>
+
+        <div class="form-options">
+          <label class="checkbox-container">
+            <input type="checkbox" formControlName="agreeToTerms">
+            <span class="checkmark"></span>
+            Я согласен с 
+            условиями использования
+            и 
+            политикой конфиденциальности
+          </label>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+          <div class="error-icon">⚠️</div>
+          {{ errorMessage }}
+        </div>
+
+        <div *ngIf="isLoading" class="loading-message">
+          <div class="spinner"></div>
+          Создание аккаунта...
+        </div>
+
+        <button 
+          type="submit" 
+          [disabled]="!registerForm.valid || isLoading"
+          class="register-button"
+        >
+          <span *ngIf="!isLoading">Создать аккаунт</span>
+          <span *ngIf="isLoading">Пожалуйста, подождите...</span>
+        </button>
+
+        <div class="login-link">
+          Уже есть аккаунт? 
+          <a routerLink="/login">Войти</a>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
