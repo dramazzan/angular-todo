@@ -2,83 +2,73 @@
 
   <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
-      
       <app-edit-profile [user]="user" (userUpdated)="closeModalWhenSuccess($event)">
       </app-edit-profile>
-
       <button class="close-button" (click)="closeModal()">X</button>
     </div>
   </div>
 
-  <h2>User Dashboard</h2>
-  
-  <!-- User Profile Card -->
+  <h2>Панель пользователя</h2>
+
   <div class="user-profile-card">
     <div class="user-avatar">
       {{ user.name.charAt(0).toUpperCase() }}
     </div>
     <div class="user-name">{{ user.name }}</div>
     <div class="user-role">{{ user.role }}</div>
-    
+
     <a [routerLink]="['/cases']" class="action-card">
       <div class="action-icon">📁</div>
-      <div>My Cases</div>
+      <div>Мои дела</div>
     </a>
-    
-    <!-- Logout Button -->
-    <!-- <button class="logout-button" (click)="logout()">
-      <div>Выйти</div>
-    </button> -->
   </div>
-  
-  <!-- User Info Card -->
+
   <div class="user-info-card">
-    <div class="info-title">User Information</div>
-    
+    <div class="info-title">Информация о пользователе</div>
+
     <div class="info-item">
-      <div class="info-label">Name:</div>
+      <div class="info-label">Имя:</div>
       <div class="info-value">{{ user.name }}</div>
     </div>
-    
+
     <div class="info-item">
-      <div class="info-label">Email:</div>
+      <div class="info-label">Почта:</div>
       <div class="info-value">{{ user.email }}</div>
     </div>
-    
+
     <div class="info-item">
-      <div class="info-label">Login:</div>
+      <div class="info-label">Логин:</div>
       <div class="info-value">{{ user.login }}</div>
     </div>
-    
+
     <div class="info-item">
-      <div class="info-label">Role:</div>
+      <div class="info-label">Роль:</div>
       <div class="info-value">{{ user.role }}</div>
     </div>
   </div>
-  
-  <!-- Actions Card -->
+
   <div class="actions-card">
-    <div class="actions-title">Quick Actions</div>
+    <div class="actions-title">Быстрые действия</div>
     <div class="actions-grid">
       <a [routerLink]="['/cases']" class="action-card">
         <div class="action-icon">📁</div>
-        <div>My Tasks</div>
+        <div>Мои задачи</div>
       </a>
       <a *ngIf="isAdmin" [routerLink]="['/admin']" class="action-card">
         <div class="action-icon">🔐</div>
-        <div>Admin Panel</div>
+        <div>Админ-панель</div>
       </a>
       <a [routerLink]="['/cases']" class="action-card">
         <div class="action-icon">➕</div>
-        <div>Create Task</div>
+        <div>Создать задачу</div>
       </a>
       <button (click)="openModal()" class="action-card">
         <div class="action-icon">✏️</div>
-        <div>Edit Profile</div>
+        <div>Редактировать профиль</div>
       </button>
       <button (click)="logout()" class="action-card">
         <div class="action-icon">🚪</div>
-        <div>Logout</div>
+        <div>Выйти</div>
       </button>
     </div>
   </div>
@@ -91,7 +81,7 @@
   <ng-template #loading>
     <div class="loading-container">
       <div class="loading-spinner"></div>
-      <p class="loading-text">Loading...</p>
+      <p class="loading-text">Загрузка...</p>
     </div>
   </ng-template>
 </ng-template>

@@ -1,25 +1,24 @@
 <div class="case-container">
-  <h2>Create New Case</h2>
+  <h2>Создать новое дело</h2>
 
-  <!-- 🔹 Индикатор загрузки -->
   <div class="loading" *ngIf="isLoading">
-    Creating case, please wait...
+    Создание дела, пожалуйста, подождите...
   </div>
 
   <form [formGroup]="createForm" (ngSubmit)="onSubmit()" class="case-form">
     <div class="form-group">
-      <label for="title">Title</label>
+      <label for="title">Название</label>
       <input id="title" formControlName="title" type="text" />
       <div class="error" *ngIf="createForm.get('title')?.invalid && createForm.get('title')?.touched">
-        Title is required.
+        Название обязательно для заполнения.
       </div>
     </div>
 
     <div class="form-group">
-      <label for="description">Description</label>
+      <label for="description">Описание</label>
       <textarea id="description" formControlName="description" rows="5"></textarea>
       <div class="error" *ngIf="createForm.get('description')?.invalid && createForm.get('description')?.touched">
-        Description is required.
+        Описание обязательно для заполнения.
       </div>
     </div>
 
@@ -27,9 +26,8 @@
       {{ errorMessage }}
     </div>
 
-    <!-- 🔹 Отключить кнопку при загрузке -->
     <button type="submit" [disabled]="createForm.invalid || isLoading">
-      Create Case
+      Создать дело
     </button>
   </form>
 </div>

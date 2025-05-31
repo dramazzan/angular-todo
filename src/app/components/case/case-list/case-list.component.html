@@ -1,7 +1,6 @@
 <div class="case-list-container">
 
-
-  <!-- Modal Window -->
+  <!-- Модальное окно -->
   <div class="modal-overlay" *ngIf="isModalOpen" (click)="closeModal()">
     <div class="modal-content" (click)="$event.stopPropagation()">
       <app-create-case
@@ -20,13 +19,13 @@
     </div>
   </div>
 
-  <!-- Header with title and toggle -->
+  <!-- Заголовок -->
   <div class="header-container">
-    <h2>{{ showTrashBin ? 'Trash Bin' : 'Case List' }}</h2>
+    <h2>{{ showTrashBin ? 'Корзина' : 'Список дел' }}</h2>
     <div class="header-buttons">
-      <a [routerLink]="['/dashboard']">Profile</a>
+      <a [routerLink]="['/dashboard']">Профиль</a>
       <button class="toggle-view-button" (click)="toggleTrashBinView()">
-        {{ showTrashBin ? 'Show Case List' : 'Show Trash Bin' }}
+        {{ showTrashBin ? 'Показать список дел' : 'Показать корзину' }}
         <span class="trash-count" *ngIf="!showTrashBin && trashBin.length > 0">
           ({{ trashBin.length }})
         </span>
@@ -38,45 +37,45 @@
     {{ errorMessage }}
   </div>
 
-  <!-- Main Case List -->
+  <!-- Основной список дел -->
   <ng-container *ngIf="!showTrashBin">
-    <!-- Search and Filter Panel -->
+    <!-- Панель поиска и фильтров -->
     <div class="search-filters-panel">
-      <!-- Search Box -->
+      <!-- Поиск -->
       <div class="search-box">
         <input 
           type="text" 
-          placeholder="Search by title or description..." 
+          placeholder="Поиск по названию или описанию..." 
           [(ngModel)]="searchQuery"
           (ngModelChange)="onSearchChange()">
       </div>
 
-      <!-- Filters -->
+      <!-- Фильтры -->
       <div class="filters-row">
         <div class="filter-item">
-          <label for="status-filter">Status:</label>
+          <label for="status-filter">Статус:</label>
           <select id="status-filter" [(ngModel)]="statusFilter" (ngModelChange)="onFilterChange()">
-            <option value="all">All statuses</option>
-            <option value="pending">Pending</option>
-            <option value="in-progress">In progress</option>
-            <option value="completed">Completed</option>
+            <option value="all">Все статусы</option>
+            <option value="pending">В ожидании</option>
+            <option value="in-progress">В процессе</option>
+            <option value="completed">Завершено</option>
           </select>
         </div>
 
         <div class="filter-item">
-          <label for="priority-filter">Priority:</label>
+          <label for="priority-filter">Приоритет:</label>
           <select id="priority-filter" [(ngModel)]="priorityFilter" (ngModelChange)="onFilterChange()">
-            <option value="all">All priorities</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="all">Все приоритеты</option>
+            <option value="low">Низкий</option>
+            <option value="medium">Средний</option>
+            <option value="high">Высокий</option>
           </select>
         </div>
 
         <div class="filter-item">
-          <label for="tag-filter">Tag:</label>
+          <label for="tag-filter">Тег:</label>
           <select id="tag-filter" [(ngModel)]="tagFilter" (ngModelChange)="onFilterChange()">
-            <option value="">All tags</option>
+            <option value="">Все теги</option>
             <option *ngFor="let tag of availableTags" [value]="tag">{{ tag }}</option>
           </select>
         </div>
@@ -86,22 +85,22 @@
             class="favorite-filter-button" 
             [class.active]="favoriteFilter !== null"
             (click)="toggleFavoriteFilter()">
-            {{ favoriteFilter === null ? 'All items' : 
-              (favoriteFilter ? 'Favorites only' : 'Non-favorites only') }}
+            {{ favoriteFilter === null ? 'Все элементы' : 
+              (favoriteFilter ? 'Только избранные' : 'Только не избранные') }}
           </button>
         </div>
       </div>
 
-      <!-- Sort Options -->
+      <!-- Сортировка -->
       <div class="sort-options">
-        <span>Sort by:</span>
+        <span>Сортировать по:</span>
         <button 
           *ngFor="let option of [
-            {field: 'title', label: 'Title'}, 
-            {field: 'priority', label: 'Priority'}, 
-            {field: 'status', label: 'Status'},
-            {field: 'createdAt', label: 'Date created'},
-            {field: 'dueDate', label: 'Due date'}
+            {field: 'title', label: 'Названию'}, 
+            {field: 'priority', label: 'Приоритету'}, 
+            {field: 'status', label: 'Статусу'},
+            {field: 'createdAt', label: 'Дате создания'},
+            {field: 'dueDate', label: 'Сроку'}
           ]" 
           class="sort-button" 
           [class.active]="sortField === option.field"
@@ -114,14 +113,14 @@
       </div>
     </div>
 
-    <!-- Case List -->
+    <!-- Список дел -->
     <div id="cases" *ngIf="filteredCaseList?.length && filteredCaseList.length > 0; else noCases">
       <ul class="case-list">
         <li *ngFor="let c of filteredCaseList" class="case-item">
           <div class="case-header">
             <h3>{{ c.title }}</h3>
             <div class="case-tags">
-              <span *ngIf="c.favorite" class="favorite-tag">★ Favorite</span>
+              <span *ngIf="c.favorite" class="favorite-tag">★ Избранное</span>
               <span class="status-tag" [ngClass]="{
                 'status-pending': c.status === 'pending',
                 'status-progress': c.status === 'in-progress',
@@ -137,18 +136,18 @@
           <p>{{ c.description }}</p>
           <div class="case-footer">
             <div class="case-meta">
-              <span *ngIf="c.dueDate">Due: {{ formatDate(c.dueDate) }}</span>
-              <span *ngIf="c.createdAt">Created: {{ formatDate(c.createdAt) }}</span>
+              <span *ngIf="c.dueDate">Срок: {{ formatDate(c.dueDate) }}</span>
+              <span *ngIf="c.createdAt">Создано: {{ formatDate(c.createdAt) }}</span>
             </div>
             <div class="case-tags-list">
               <span *ngFor="let tag of c.tags" class="tag">{{ tag }}</span>
             </div>
             <div class="case-actions">
               <button *ngIf="c._id" (click)="toggleFavorite(c._id)" class="favorite-button">
-                {{ c.favorite ? 'Remove from favorites' : 'Add to favorites' }}
+                {{ c.favorite ? 'Убрать из избранного' : 'Добавить в избранное' }}
               </button>
-              <button *ngIf="c._id" (click)="moveToTrash(c)" class="delete-button">Delete</button>
-              <button *ngIf="c._id" (click)="openModal('update', c, c._id)" class="update-button">Update</button>
+              <button *ngIf="c._id" (click)="moveToTrash(c)" class="delete-button">Удалить</button>
+              <button *ngIf="c._id" (click)="openModal('update', c, c._id)" class="update-button">Редактировать</button>
             </div>
           </div>
         </li>
@@ -156,22 +155,22 @@
     </div>
 
     <button (click)="openModal('create')" class="create-button">
-      Create Case
+      Создать дело
     </button>
 
     <ng-template #noCases>
-      <p>No cases available or no cases match your filters.</p>
+      <p>Нет доступных дел или ни одно не соответствует фильтрам.</p>
     </ng-template>
   </ng-container>
 
-  <!-- Trash Bin -->
+  <!-- Корзина -->
   <ng-container *ngIf="showTrashBin">
     <div class="trash-bin-container">
       <div class="trash-actions-panel">
         <div class="search-box">
           <input 
             type="text" 
-            placeholder="Search in trash..." 
+            placeholder="Поиск в корзине..." 
             [(ngModel)]="searchQuery"
             (ngModelChange)="onSearchChange()">
         </div>
@@ -181,7 +180,7 @@
             *ngIf="trashBin.length > 0"
             class="empty-trash-button" 
             (click)="emptyTrash()">
-            Empty Trash
+            Очистить корзину
           </button>
         </div>
       </div>
@@ -192,14 +191,14 @@
             <div class="case-header">
               <h3>{{ c.title }}</h3>
               <div class="delete-info">
-                <span>Deleted: {{ c.deletedAt ? formatDate(c.deletedAt) : 'Unknown' }}</span>
+                <span>Удалено: {{ c.deletedAt ? formatDate(c.deletedAt) : 'Неизвестно' }}</span>
               </div>
             </div>
             <p>{{ c.description }}</p>
             <div class="case-footer">
               <div class="case-meta">
-                <span *ngIf="c.dueDate">Due: {{ formatDate(c.dueDate) }}</span>
-                <span *ngIf="c.createdAt">Created: {{ formatDate(c.createdAt) }}</span>
+                <span *ngIf="c.dueDate">Срок: {{ formatDate(c.dueDate) }}</span>
+                <span *ngIf="c.createdAt">Создано: {{ formatDate(c.createdAt) }}</span>
                 <span class="status-tag" [ngClass]="{
                   'status-pending': c.status === 'pending',
                   'status-progress': c.status === 'in-progress',
@@ -216,10 +215,10 @@
               </div>
               <div class="trash-item-actions">
                 <button *ngIf="c._id" (click)="restoreFromTrash(c._id)" class="restore-button">
-                  Restore
+                  Восстановить
                 </button>
                 <button *ngIf="c._id" (click)="deleteFromTrash(c._id)" class="permanent-delete-button">
-                  Delete permanently
+                  Удалить навсегда
                 </button>
               </div>
             </div>
@@ -229,7 +228,7 @@
 
       <ng-template #empty_trash>
         <div class="empty-trash-message">
-          <p>The trash bin is empty. Deleted cases will appear here.</p>
+          <p>Корзина пуста. Удалённые дела появятся здесь.</p>
         </div>
       </ng-template>
     </div>
